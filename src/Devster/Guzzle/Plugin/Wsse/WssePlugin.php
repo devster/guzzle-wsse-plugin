@@ -69,7 +69,7 @@ class WssePlugin implements EventSubscriberInterface
     public function onRequestBeforeSend(Event $event)
     {
         // Nonce validation
-        if (! $this->isCallable($this->config['nonce_callback'])) {
+        if (! is_callable($this->config['nonce_callback'])) {
             throw new \InvalidArgumentException('Option nonce_callback must be a callable or a Closure');
         }
 
@@ -80,7 +80,7 @@ class WssePlugin implements EventSubscriberInterface
         }
 
         // Timestamp validation
-        if (! $this->isCallable($this->config['timestamp_callback'])) {
+        if (! is_callable($this->config['timestamp_callback'])) {
             throw new \InvalidArgumentException('Option timestamp_callback must be a callable or a Closure');
         }
 
@@ -132,17 +132,6 @@ class WssePlugin implements EventSubscriberInterface
     public function digest($password, $nonce, $timestamp)
     {
         return base64_encode(sha1($nonce.$timestamp.$password, true));
-    }
-
-    /**
-     * Helper to detect full callable
-     *
-     * @param  mixed $callback
-     * @return boolean
-     */
-    protected function isCallable($callback)
-    {
-        return is_callable($callback) || $callback instanceof \Closure;
     }
 
     /**
