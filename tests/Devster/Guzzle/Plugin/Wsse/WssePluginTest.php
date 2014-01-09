@@ -37,7 +37,7 @@ class WssePluginTest extends \PHPUnit_Framework_TestCase
     public function testSubscribesToEvents()
     {
         $events = WssePlugin::getSubscribedEvents();
-        $this->assertArrayHasKey('request.before_send', $events);
+        $this->assertArrayHasKey('client.create_request', $events);
     }
 
     public function testConfiguration()
@@ -112,52 +112,52 @@ class WssePluginTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testOnRequestBeforeSend_BadNonceCallback()
+    public function testOnCreateRequest_BadNonceCallback()
     {
         $config = $this->config;
         $config['nonce_callback'] = 'string';
 
         $p = new WssePlugin($config);
-        $p->onRequestBeforeSend($this->getEvent());
+        $p->onCreateRequest($this->getEvent());
     }
 
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testOnRequestBeforeSend_BadNonceCallbackResponse()
+    public function testOnCreateRequest_BadNonceCallbackResponse()
     {
         $config = $this->config;
         $config['nonce_callback'] = function() { return 42; };
 
         $p = new WssePlugin($config);
-        $p->onRequestBeforeSend($this->getEvent());
+        $p->onCreateRequest($this->getEvent());
     }
 
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testOnRequestBeforeSend_BadTimestampCallback()
+    public function testOnCreateRequest_BadTimestampCallback()
     {
         $config = $this->config;
         $config['timestamp_callback'] = 'string';
 
         $p = new WssePlugin($config);
-        $p->onRequestBeforeSend($this->getEvent());
+        $p->onCreateRequest($this->getEvent());
     }
 
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testOnRequestBeforeSend_BadTimestampCallbackResponse()
+    public function testOnCreateRequest_BadTimestampCallbackResponse()
     {
         $config = $this->config;
         $config['timestamp_callback'] = function() { return 42; };
 
         $p = new WssePlugin($config);
-        $p->onRequestBeforeSend($this->getEvent());
+        $p->onCreateRequest($this->getEvent());
     }
 
-    public function testOnRequestBeforeSend()
+    public function testOnCreateRequest()
     {
         $event = $this->getEvent();
         $request = $event['request'];
@@ -169,7 +169,7 @@ class WssePluginTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($request->getHeader('Authorization'));
         $this->assertNull($request->getHeader('X-WSSE'));
 
-        $p->onRequestBeforeSend($event);
+        $p->onCreateRequest($event);
 
         // test the Authorization header
         $this->assertNotNull($header = $request->getHeader('Authorization'));
