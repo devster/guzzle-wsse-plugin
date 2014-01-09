@@ -55,18 +55,18 @@ class WssePlugin implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'request.before_send' => array('onRequestBeforeSend', -1000)
+            'client.create_request' => 'onCreateRequest'
         );
     }
 
     /**
-     * Request before-send event handler
+     * Request on create event handler
      *
      * @param Event $event Event received
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function onRequestBeforeSend(Event $event)
+    public function onCreateRequest(Event $event)
     {
         // Nonce validation
         if (! is_callable($this->config['nonce_callback'])) {
