@@ -1,4 +1,4 @@
-guzzle-wsse-plugin
+Guzzle WSSE Plugin
 ==================
 
 Plugin Guzzle to manage WSSE Authentication
