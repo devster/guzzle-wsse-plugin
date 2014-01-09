@@ -3,7 +3,7 @@ Guzzle WSSE Plugin
 
 [![Latest Stable Version](https://poser.pugx.org/devster/guzzle-wsse-plugin/v/stable.png)](https://packagist.org/packages/devster/guzzle-wsse-plugin) [![Build Status](https://travis-ci.org/devster/guzzle-wsse-plugin.png?branch=master)](https://travis-ci.org/devster/guzzle-wsse-plugin)
 
-Plugin Guzzle to manage WSSE Authentication
+Guzzle Plugin to manage WSSE Authentication
 
 More informations on WSSE authentication [http://www.xml.com/pub/a/2003/12/17/dive.html](http://www.xml.com/pub/a/2003/12/17/dive.html)
 
@@ -74,6 +74,8 @@ $client = new Client('http://example.com');
 $client->addSubscriber($plugin);
 ```
 
+The `nonce_callback` option can be any callable (ex: `[$obj, 'method']`)
+
 ### Customize the way the timestamp is created
 
 The timestamp created by the plugin doesn't fit your need?
@@ -97,6 +99,7 @@ $plugin = new WssePlugin(array(
 $client = new Client('http://example.com');
 $client->addSubscriber($plugin);
 ```
+The `timestamp_callback` option can be any callable (ex: `[$obj, 'method']`)
 
 License
 -------
