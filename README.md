@@ -52,7 +52,7 @@ Customization
 
 ### Customize the way the nonce is created
 
-The nonces created by the plugin doesn't fit your need? you think their not generated in secure way?
+The nonces created by the plugin doesn't fit your need? You think they not generated in a secure way?
 
 All right you can change that:
 
