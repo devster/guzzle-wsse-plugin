@@ -18,12 +18,12 @@ class WssePlugin implements EventSubscriberInterface
     /**
      * Create a new WssePlugin
      * @param array $config Configuration array containing these parameters:
-     *     - string           'username'           Username required by the WSSE auth
-     *     - string           'password'           Password required by the WSSE auth
-     *     - callable         'timestamp_callback' (Optional) Callback that must
-     *      returns a \DateTime instance
-     *     - callable|Closure 'nonce_timestamp'    (Optional) Callback that must
-     *      return a unique nonce
+     *                      - string           'username'           Username required by the WSSE auth
+     *                      - string           'password'           Password required by the WSSE auth
+     *                      - callable         'timestamp_callback' (Optional) Callback that must
+     *                      returns a \DateTime instance
+     *                      - callable|Closure 'nonce_timestamp'    (Optional) Callback that must
+     *                      return a unique nonce
      */
     public function __construct($config)
     {
@@ -62,7 +62,7 @@ class WssePlugin implements EventSubscriberInterface
     /**
      * Request on create event handler
      *
-     * @param Event $event Event received
+     * @param  Event                     $event Event received
      * @return array
      * @throws \InvalidArgumentException
      */
