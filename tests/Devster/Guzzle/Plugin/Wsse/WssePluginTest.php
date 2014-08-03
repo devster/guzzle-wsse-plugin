@@ -127,7 +127,7 @@ class WssePluginTest extends \PHPUnit_Framework_TestCase
     public function testOnCreateRequest_BadNonceCallbackResponse()
     {
         $config = $this->config;
-        $config['nonce_callback'] = function() { return 42; };
+        $config['nonce_callback'] = function () { return 42; };
 
         $p = new WssePlugin($config);
         $p->onCreateRequest($this->getEvent());
@@ -151,7 +151,7 @@ class WssePluginTest extends \PHPUnit_Framework_TestCase
     public function testOnCreateRequest_BadTimestampCallbackResponse()
     {
         $config = $this->config;
-        $config['timestamp_callback'] = function() { return 42; };
+        $config['timestamp_callback'] = function () { return 42; };
 
         $p = new WssePlugin($config);
         $p->onCreateRequest($this->getEvent());
