@@ -1,7 +1,8 @@
 Guzzle WSSE Plugin
 ==================
 
-[![Latest Stable Version](https://poser.pugx.org/devster/guzzle-wsse-plugin/v/stable.png)](https://packagist.org/packages/devster/guzzle-wsse-plugin) [![Build Status](https://travis-ci.org/devster/guzzle-wsse-plugin.png?branch=master)](https://travis-ci.org/devster/guzzle-wsse-plugin)
+[![Latest Stable Version](https://badge.fury.io/ph/devster%2Fguzzle-wsse-plugin.svg)](https://packagist.org/packages/devster/guzzle-wsse-plugin)
+[![Build Status](https://travis-ci.org/devster/guzzle-wsse-plugin.png?branch=master)](https://travis-ci.org/devster/guzzle-wsse-plugin)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/devster/guzzle-wsse-plugin/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/devster/guzzle-wsse-plugin/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/devster/guzzle-wsse-plugin/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/devster/guzzle-wsse-plugin/?branch=master)
 
