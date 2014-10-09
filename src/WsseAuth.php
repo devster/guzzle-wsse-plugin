@@ -160,28 +160,6 @@ class WsseAuth implements SubscriberInterface
      */
     public function onBefore(BeforeEvent $event)
     {
-        // // Nonce validation
-        // if (! is_callable($this->config['nonce_callback'])) {
-        //     throw new \InvalidArgumentException('Option nonce_callback must be a callable or a Closure');
-        // }
-
-        // $nonce = call_user_func($this->config['nonce_callback'], $event);
-
-        // if (! is_string($nonce) || '' == $nonce) {
-        //     throw new \InvalidArgumentException('Option nonce_callback must return an non empty string');
-        // }
-
-        // // Timestamp validation
-        // if (! is_callable($this->config['timestamp_callback'])) {
-        //     throw new \InvalidArgumentException('Option timestamp_callback must be a callable or a Closure');
-        // }
-
-        // $timestamp = call_user_func($this->config['timestamp_callback'], $event);
-
-        // if (! $timestamp instanceof \DateTime) {
-        //     throw new \InvalidArgumentException('Option timestamp_callback must return a \DateTime instance');
-        // }
-
         $now       = new \DateTime;
         $createdAt = $now->format($this->getDateFormat());
         $request   = $event->getRequest();
