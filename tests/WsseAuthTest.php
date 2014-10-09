@@ -66,7 +66,7 @@ class WsseAuthTest extends \PHPUnit_Framework_TestCase
         $this->wsseHeaderTest($header, array(
             'John',
             'digest',
-            'nonce',
+            base64_encode('nonce'),
             'createdAt'
         ));
     }
@@ -103,7 +103,7 @@ class WsseAuthTest extends \PHPUnit_Framework_TestCase
             )
         );
         $this->assertEquals('John', $matches[1]);
-        $this->assertEquals(WsseAuth::digest($matches[3], $matches[4], 'pass'), $matches[2]);
+        $this->assertEquals(WsseAuth::digest(base64_decode($matches[3]), $matches[4], 'pass'), $matches[2]);
         $this->assertInternalType('string', $matches[3]);
         $this->assertRegExp('/(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})/', $matches[4]);
     }
@@ -128,7 +128,7 @@ class WsseAuthTest extends \PHPUnit_Framework_TestCase
         $this->wsseHeaderTest($request->getHeader('X-WSSE'), array(
             'John',
             'custom_digest',
-            'custom_nonce',
+            base64_encode('custom_nonce'),
             date('m-Y')
         ));
     }

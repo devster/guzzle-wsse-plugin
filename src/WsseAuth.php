@@ -194,7 +194,7 @@ class WsseAuth implements SubscriberInterface
             'UsernameToken Username="%s", PasswordDigest="%s", Nonce="%s", Created="%s"',
             $username,
             $digest,
-            $nonce,
+            base64_encode($nonce),
             $createdAt
         );
     }
