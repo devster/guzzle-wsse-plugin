@@ -14,7 +14,7 @@
     ],
 
     "autoload": {
-        "psr-0": { "Devster\\Guzzle\\Plugin\\Wsse": "src/" }
+        "psr-4": { "Devster\\GuzzleHttp\\Subscriber\\": "src/" }
     },
 
     "require": {
@@ -22,7 +22,7 @@
     },
 
     "require-dev": {
-        "guzzle/guzzle": "~3.7",
+        "guzzlehttp/guzzle": "4.*",
 	    "phpunit/phpunit": "3.7.*"
     }
 }
