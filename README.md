@@ -2,10 +2,15 @@ Guzzle WSSE Plugin
 ==================
 
 [![Latest Stable Version](https://poser.pugx.org/devster/guzzle-wsse-plugin/v/stable.png)](https://packagist.org/packages/devster/guzzle-wsse-plugin) [![Build Status](https://travis-ci.org/devster/guzzle-wsse-plugin.png?branch=master)](https://travis-ci.org/devster/guzzle-wsse-plugin)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/devster/guzzle-wsse-plugin/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/devster/guzzle-wsse-plugin/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/devster/guzzle-wsse-plugin/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/devster/guzzle-wsse-plugin/?branch=master)
 
 Guzzle Plugin to manage WSSE Authentication
 
 More informations on WSSE authentication [http://www.xml.com/pub/a/2003/12/17/dive.html](http://www.xml.com/pub/a/2003/12/17/dive.html)
+
+* **Guzzle 3: install `1.*` version**
+* **Guzzle 4: install `2.*` version**
 
 Installation
 ------------
@@ -17,7 +22,7 @@ Installation
 curl -sS https://getcomposer.org/installer | php
 
 # Add the plugin as a dependency
-php composer.phar require devster/guzzle-wsse-plugin:~1.0
+php composer.phar require devster/guzzle-wsse-plugin:~2.0
 ```
 
 After installing, you need to require Composer's autoloader:
@@ -32,74 +37,53 @@ Basic usage
 ```php
 require vendor/autoload.php
 
-use Guzzle\Http\Client;
-use Devster\Guzzle\Plugin\Wsse\WssePlugin;
+use GuzzleHttp\Client;
+use Devster\GuzzleHttp\Subscriber\WsseAuth;
 
 // Create a Guzzle client
-$client new Client('http://example.com');
+$client new Client(['base_url' => 'http://example.com']);
 // and add it the plugin
-$client->addSubscriber(new WssePlugin(array(
-    'username'  => 'rupert',
-    'password' => '*********'
-)));
-// Now the plugin will add the correct WSSE headers to your guzzle request
+(new WsseAuth('username', 'pass****'))->attach($client);
+// Or
+$client->getEmitter()->attach(new WsseAuth('username', '********'));
 
+// Now the plugin will add the correct WSSE headers to your guzzle request
 $response = $client->get('/data')->send();
 ```
 
 Customization
 -------------
 
-### Customize the way the nonce is created
+You can customize:
 
-The nonces created by the plugin doesn't fit your need? You think they not generated in a secure way?
-
-All right you can change that:
-
-```php
-use Guzzle\Common\Event;
-use Guzzle\Http\Client;
-use Devster\Guzzle\Plugin\Wsse\WssePlugin;
-
-$plugin = new WssePlugin(array(
-    'username' => 'rupert',
-    'password' => '*******',
-    'nonce_callback' => function (Event $event) {
-        return uniqid('myapp_', true);
-    }
-));
-
-// and we add the plugin to the client of course
-$client = new Client('http://example.com');
-$client->addSubscriber($plugin);
-```
-
-The `nonce_callback` option can be any callable (ex: `[$obj, 'method']`)
-
-### Customize the way the timestamp is created
-
-The timestamp created by the plugin doesn't fit your need?
+* The nonce generation
+* The digest generation
+* And the date format
 
 ```php
-use Guzzle\Common\Event;
-use Guzzle\Http\Client;
-use Devster\Guzzle\Plugin\Wsse\WssePlugin;
+use GuzzleHttp\Client;
+use GuzzleHttp\Message\RequestInterface;
+use Devster\GuzzleHttp\Subscriber\WsseAuth;
 
-$plugin = new WssePlugin(array(
-    'username' => 'rupert',
-    'password' => '*******',
-    // /!\ The timestamp callback must return a \DateTime instance
-    'timestamp_callback' => function (Event $event) {
-        $date = new \DateTime();
-        return $date;
-    }
-));
+$client = new Client;
 
-// and we add the plugin to the client of course
-$client = new Client('http://example.com');
-$client->addSubscriber($plugin);
+$plugin = new WsseAuth('username', 'pass****');
+$plugin
+    ->attach($client)
+    ->setNonce(function (RequestInterface $request) {
+        return uniqid('my_nonce', true);
+    })
+    ->setDigest(function ($nonce, $createdAt, $password) {
+        return $nonce.$createdAt.$password;
+    })
+    ->setDateFormat('Y-m-d') // PHP format. Default: c (ISO 8601)
+;
 ```
-The `timestamp_callback` option can be any callable (ex: `[$obj, 'method']`)
+
+Tests
+-----
+
+    composer install && vendor/bin/phpunit
 
 License
 -------
