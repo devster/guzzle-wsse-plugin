@@ -36,7 +36,7 @@ Basic usage
 -----------
 
 ```php
-require vendor/autoload.php
+require 'vendor/autoload.php';
 
 use GuzzleHttp\Client;
 use Devster\GuzzleHttp\Subscriber\WsseAuth;
