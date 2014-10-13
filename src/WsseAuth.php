@@ -35,14 +35,19 @@ class WsseAuth implements SubscriberInterface
     protected $dateFormat = 'c';
 
     /**
-     * @var Callable
+     * @var callable
      */
     protected $nonce;
 
     /**
-     * @var Callable
+     * @var callable
      */
     protected $digest;
+
+    /**
+     * @var callable
+     */
+    protected $passwordProcessor;
 
     /**
      * @param string $username
@@ -75,7 +80,7 @@ class WsseAuth implements SubscriberInterface
      *
      * @param string $dateFormat
      *
-     * @return WssePlugin The current instance
+     * @return WsseAuth The current instance
      */
     public function setDateFormat($dateFormat)
     {
@@ -99,7 +104,7 @@ class WsseAuth implements SubscriberInterface
      *
      * @param callable $nonce
      *
-     * @return WssePlugin The current instance
+     * @return WsseAuth The current instance
      */
     public function setNonce(callable $nonce)
     {
@@ -123,7 +128,7 @@ class WsseAuth implements SubscriberInterface
      *
      * @param callable $digest
      *
-     * @return WssePlugin The current instance
+     * @return WsseAuth The current instance
      */
     public function setDigest(callable $digest)
     {
@@ -140,6 +145,30 @@ class WsseAuth implements SubscriberInterface
     public function getDigest()
     {
         return $this->digest;
+    }
+
+    /**
+     * Set passwordProcessor
+     *
+     * @param callable $passwordProcessor
+     *
+     * @return WsseAuth
+     */
+    public function setPasswordProcessor($passwordProcessor)
+    {
+        $this->passwordProcessor = $passwordProcessor;
+
+        return $this;
+    }
+
+    /**
+     * Get passwordProcessor
+     *
+     * @return callable
+     */
+    public function getPasswordProcessor()
+    {
+        return $this->passwordProcessor;
     }
 
     /**
@@ -164,7 +193,8 @@ class WsseAuth implements SubscriberInterface
         $createdAt = $now->format($this->getDateFormat());
         $request   = $event->getRequest();
         $nonce     = call_user_func($this->getNonce(), $request);
-        $digest    = call_user_func($this->getDigest(), $nonce, $createdAt, $this->password);
+        $password  = $this->passwordProcessor ? call_user_func($this->passwordProcessor, $this->password) : $this->password;
+        $digest    = call_user_func($this->getDigest(), $nonce, $createdAt, $password);
 
         $request->setHeader('Authorization', 'WSSE profile="UsernameToken"');
         $request->setHeader(

@@ -78,6 +78,10 @@ $plugin
         return $nonce.$createdAt.$password;
     })
     ->setDateFormat('Y-m-d') // PHP format. Default: c (ISO 8601)
+    // Process a behavior (like hashing) on the password before it pass to the digest generator
+    ->setPasswordProcessor(function ($password) {
+        return sha1($password);
+    })
 ;
 ```
 

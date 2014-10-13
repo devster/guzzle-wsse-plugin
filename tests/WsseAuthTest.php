@@ -5,6 +5,7 @@ namespace Devster\Test\GuzzleHttp\Subscriber;
 use Devster\GuzzleHttp\Subscriber\WsseAuth;
 use GuzzleHttp\Client;
 use GuzzleHttp\Message\Response;
+use GuzzleHttp\Subscriber\Mock;
 
 /**
  * @covers Devster\GuzzleHttp\Subscriber\WsseAuth
@@ -18,7 +19,12 @@ class WsseAuthTest extends \PHPUnit_Framework_TestCase
 
     protected function createClient()
     {
-        return new Client();
+        $client = new Client();
+
+        $mock = new Mock(array(new Response(200)));
+        $client->getEmitter()->attach($mock);
+
+        return $client;
     }
 
     public function testNonce()
@@ -77,12 +83,6 @@ class WsseAuthTest extends \PHPUnit_Framework_TestCase
         $plugin = $this->createPlugin();
         $client->getEmitter()->attach($plugin);
 
-        // Prevent the sending
-        $client->getEmitter()->on('before', function ($e) {
-            $response = new Response(200);
-            $e->intercept($response);
-        }, 'last');
-
         $request = $client->createRequest('GET', 'http://example.com');
 
         $this->assertEmpty($request->getHeader('Authorization'));
@@ -114,20 +114,24 @@ class WsseAuthTest extends \PHPUnit_Framework_TestCase
         $plugin = $this->createPlugin();
         $plugin
             ->attach($client)
-            ->setDigest(function () {
-                return 'custom_digest';
+            ->setDigest(function ($nonce, $createdAt, $password) {
+                return 'custom_digest+'.$password;
             })
             ->setNonce(function () {
                 return 'custom_nonce';
             })
             ->setDateFormat('m-Y')
+            ->setPasswordProcessor(function ($password) {
+                return 'custom_'.$password;
+            })
         ;
+
         $request = $client->createRequest('GET', 'http://example.com');
         $client->send($request);
 
         $this->wsseHeaderTest($request->getHeader('X-WSSE'), array(
             'John',
-            'custom_digest',
+            'custom_digest+custom_pass',
             base64_encode('custom_nonce'),
             date('m-Y')
         ));
